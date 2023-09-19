@@ -1,8 +1,8 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Work_Sans } from 'next/font/google';
+import { Inter, Work_Sans } from 'next/font/google';
 
-const work_sans = Work_Sans({ subsets: ['latin'], weight: '400' });
+const inter = Inter({ subsets: ['latin']});
 
 export const metadata: Metadata = {
   title: 'WAppConnect',
@@ -15,8 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='en'>
-      <body className={work_sans.className}>{children}</body>
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

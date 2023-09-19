@@ -5,6 +5,6 @@ export async function GET(request: Request) {
     { message: 'Hello from WAppConnect!' },
     {
       status: 200,
-    }
+    },
   );
 }
