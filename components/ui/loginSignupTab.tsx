@@ -10,9 +10,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 const LoginSignupTab = () => {
   const { toast } = useToast();
+  const router = useRouter();
 
   const [loginData, setLoginData] = useState({
     email: '',
@@ -78,7 +80,12 @@ const LoginSignupTab = () => {
   };
 
   // handles both signup and login
-  const handleSubmit = async (type: string) => {
+  const handleSubmit = async (
+    e: React.FormEvent<HTMLFormElement>,
+    type: string,
+  ) => {
+    e.preventDefault();
+
     setLoading(true);
     if (type === 'signup') {
       const { name, email, password, confirmPassword } = signupData;
@@ -106,9 +113,40 @@ const LoginSignupTab = () => {
           toast({
             title: 'Registration successful',
           });
+          localStorage.setItem('userInfo', JSON.stringify(data.user));
         }
-        localStorage.setItem('userInfo', JSON.stringify(data.user));
         setLoading(false);
+        router.push('/chat');
+      } catch (error: any) {
+        toast({
+          title: error.response.data.message,
+        });
+        setLoading(false);
+      }
+    }
+    // login
+    else {
+      const { email, password } = loginData;
+      if (!email || !password) {
+        toast({ title: 'Please fill all the fields' });
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const { data } = await axios.post('/api/users/login', {
+          email,
+          password,
+        });
+
+        if (data.success) {
+          toast({
+            title: 'Login successful',
+          });
+          localStorage.setItem('userInfo', JSON.stringify(data.user));
+        }
+        setLoading(false);
+        router.push('/chat');
       } catch (error: any) {
         toast({
           title: error.response.data.message,
@@ -119,7 +157,7 @@ const LoginSignupTab = () => {
   };
 
   return (
-    <Tabs defaultValue='login' className="w-[400px]">
+    <Tabs defaultValue="login" className="w-[400px]">
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="login">Login</TabsTrigger>
         <TabsTrigger value="signup">Signup</TabsTrigger>
@@ -127,126 +165,132 @@ const LoginSignupTab = () => {
       {/* login tab */}
       <TabsContent value="login" className="my-6">
         <Card className="py-2">
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="email">
-                Email Address <span className="text-red-600">*</span>
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                value={loginData.email}
-                placeholder="guest@example.com"
-                type="email"
-                onChange={handleLoginData}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="password">
-                Password <span className="text-red-600">*</span>
-              </Label>
-              <Input
-                id="password"
-                name="password"
-                value={loginData.password}
-                placeholder="******"
-                type="password"
-                onChange={handleLoginData}
-              />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button
-              className="w-full bg-green-600 hover:bg-green-500"
-              onClick={() => handleSubmit('login')}
-            >
-              Login
-            </Button>
-          </CardFooter>
+          <form onSubmit={(e) => handleSubmit(e, 'login')}>
+            <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Label htmlFor="email">
+                  Email Address <span className="text-red-600">*</span>
+                </Label>
+                <Input
+                  id="email"
+                  name="email"
+                  value={loginData.email}
+                  placeholder="guest@example.com"
+                  type="email"
+                  required
+                  onChange={handleLoginData}
+                />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="password">
+                  Password <span className="text-red-600">*</span>
+                </Label>
+                <Input
+                  id="password"
+                  name="password"
+                  value={loginData.password}
+                  placeholder="******"
+                  type="password"
+                  onChange={handleLoginData}
+                />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button
+                disabled={loading}
+                className="w-full bg-green-600 hover:bg-green-500"
+                type="submit"
+              >
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Login
+              </Button>
+            </CardFooter>
+          </form>
         </Card>
       </TabsContent>
       {/* signup tab */}
       <TabsContent value="signup">
         <Card className="py-2">
-          <CardContent className="space-y-2">
-            <div className="space-y-1">
-              <Label htmlFor="name">
-                Name <span className="text-red-600">*</span>
-              </Label>
-              <Input
-                id="name"
-                name="name"
-                value={signupData.name}
-                placeholder="Enter your Name"
-                type="text"
-                onChange={handleSignupData}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="email">
-                Email Address <span className="text-red-600">*</span>
-              </Label>
-              <Input
-                id="email"
-                name="email"
-                value={signupData.email}
-                placeholder="Enter you email Address"
-                type="email"
-                onChange={handleSignupData}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="password">
-                Password <span className="text-red-600">*</span>
-              </Label>
-              <Input
-                id="password"
-                name="password"
-                value={signupData.password}
-                placeholder="Password"
-                type="password"
-                onChange={handleSignupData}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label htmlFor="confirm_password">
-                Confirm Password <span className="text-red-600">*</span>
-              </Label>
-              <Input
-                id="confirm_password"
-                name="confirmPassword"
-                value={signupData.confirmPassword}
-                placeholder="Confirm Password"
-                type="password"
-                onChange={handleSignupData}
-              />
-            </div>
+          <form onSubmit={(e) => handleSubmit(e, 'signup')}>
+            <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Label htmlFor="name">
+                  Name <span className="text-red-600">*</span>
+                </Label>
+                <Input
+                  id="name"
+                  name="name"
+                  value={signupData.name}
+                  placeholder="Enter your Name"
+                  type="text"
+                  onChange={handleSignupData}
+                />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="email">
+                  Email Address <span className="text-red-600">*</span>
+                </Label>
+                <Input
+                  id="email"
+                  name="email"
+                  value={signupData.email}
+                  placeholder="Enter you email Address"
+                  type="email"
+                  onChange={handleSignupData}
+                />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="password">
+                  Password <span className="text-red-600">*</span>
+                </Label>
+                <Input
+                  id="password"
+                  name="password"
+                  value={signupData.password}
+                  placeholder="Password"
+                  type="password"
+                  onChange={handleSignupData}
+                />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="confirm_password">
+                  Confirm Password <span className="text-red-600">*</span>
+                </Label>
+                <Input
+                  id="confirm_password"
+                  name="confirmPassword"
+                  value={signupData.confirmPassword}
+                  placeholder="Confirm Password"
+                  type="password"
+                  onChange={handleSignupData}
+                />
+              </div>
 
-            <div className="space-y-1">
-              <Label htmlFor="pic">Upload Picture</Label>
-              <Input
-                id="pic"
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  const files = e.target.files;
-                  if (files && files.length > 0) {
-                    postDetails(files[0]);
-                  }
-                }}
-              />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button
-              disabled={loading}
-              className="w-full bg-green-600 hover:bg-green-500"
-              onClick={() => handleSubmit('signup')}
-            >
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign Up
-            </Button>
-          </CardFooter>
+              <div className="space-y-1">
+                <Label htmlFor="pic">Upload Picture</Label>
+                <Input
+                  id="pic"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const files = e.target.files;
+                    if (files && files.length > 0) {
+                      postDetails(files[0]);
+                    }
+                  }}
+                />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button
+                disabled={loading}
+                className="w-full bg-green-600 hover:bg-green-500"
+              >
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Sign Up
+              </Button>
+            </CardFooter>
+          </form>
         </Card>
       </TabsContent>
     </Tabs>

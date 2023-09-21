@@ -20,12 +20,15 @@ export async function POST(request: NextRequest) {
             return errorHandler(400, 'Email already registered')
         }
 
-        // if everything is fine
         const user = await User.create({ name, email, password, pic })
 
-        user.password = undefined;
+        // if everything is fine generate token from user methods and set cookies
+        const token = user.getJwttoken()
 
-        return NextResponse.json({ message: 'User registered', success: true, user }, { status: 201 })
+        user.password = undefined
+
+        const response = NextResponse.json({ message: 'Login successfull', user, success: true }, { status: 201 })
+        response.cookies.set('token', token, { httpOnly: true })
     } catch (error) {
         return errorHandler()
     }
