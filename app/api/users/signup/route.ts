@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/config/db";
 import User from "@/models/user";
 import { errorHandler } from "@/middlewares/error";
+import jwt from 'jsonwebtoken'
 
 connect()
 
@@ -22,8 +23,17 @@ export async function POST(request: NextRequest) {
 
         const user = await User.create({ name, email, password, pic })
 
-        // if everything is fine generate token from user methods and set cookies
-        const token = user.getJwttoken()
+
+        // create token data
+        const tokenData = {
+            id: user._id,
+            name: user.name,
+            email: user.email
+        }
+
+        const token = await jwt.sign(tokenData, process.env.JWT_SECRET!, {
+            expiresIn: process.env.JWT_EXPIRY!,
+        });
 
         user.password = undefined
 
