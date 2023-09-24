@@ -42,7 +42,6 @@ export async function POST(request: NextRequest) {
                 },
             );
         }
-
         // otherwise create a new chat
         else {
             const chatData = {
@@ -64,16 +63,34 @@ export async function POST(request: NextRequest) {
         }
 
     } catch (error) {
-        errorHandler()
+        return errorHandler()
     }
 }
 
+// Fetch all the chats of a user
 export async function GET(request: NextRequest) {
-    const LoggedInUser = getDataFromToken(request)
+    try {
+        const LoggedInUser = getDataFromToken(request)
 
-    // if user not authorized
-    if (!LoggedInUser) {
-        return NextResponse.json({ success: false, message: "Not authorized" }, { status: 401 })
+        // if user not authorized
+        if (!LoggedInUser) {
+            return NextResponse.json({ success: false, message: "Not authorized" }, { status: 401 })
+        }
+
+        // get allchats of user and populate desired fields
+        let allChats = await Chat.find({ users: { $elemMatch: { $eq: LoggedInUser.id } } })
+            .populate("users", "-password") // users of the chat
+            .populate("groupAdmin", "-password") // group admin of the chat
+            .populate("latestMessage") // lateste message
+            .sort({ updatedAt: -1 }) // sort it by the latest 
+        // populate fields from User 
+        allChats = await User.populate(allChats, {
+            path: 'latestMessage.sender',
+            select: "name pic email"
+        })
+
+        return NextResponse.json({ allChats, success: true }, { status: 200 })
+    } catch (error) {
+        return errorHandler()
     }
-
 }
