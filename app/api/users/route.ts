@@ -6,6 +6,7 @@ import { getDataFromToken } from "@/helpers/getUserFromToken";
 
 connect()
 
+// Returns all users except the loggedin user
 export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url)

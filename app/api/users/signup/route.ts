@@ -37,8 +37,10 @@ export async function POST(request: NextRequest) {
 
         user.password = undefined
 
-        const response = NextResponse.json({ message: 'Login successfull', user, success: true }, { status: 201 })
+        const response = NextResponse.json({ message: 'Signup successfull', user, success: true }, { status: 201 })
         response.cookies.set('token', token, { httpOnly: true })
+
+        return response
     } catch (error) {
         return errorHandler()
     }
