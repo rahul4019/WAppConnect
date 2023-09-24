@@ -26,9 +26,11 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ message: "At least 2 users are required to form a group", sucess: false }, { status: 400 })
         }
 
+        // push the loggedIn user in the parsedUsers Array
         parsedUsers.push(LoggedInUser.id)
 
 
+        // Create group chat
         const groupChat = await Chat.create({
             chatName: name,
             users: parsedUsers,
@@ -36,7 +38,7 @@ export async function POST(request: NextRequest) {
             groupAdmin: LoggedInUser.id,
         })
 
-
+        // Populate users and groupAdming field of the newly created group chat 
         const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
             .populate("users", "-password")
             .populate("groupAdmin", "-password")
