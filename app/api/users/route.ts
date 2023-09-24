@@ -6,7 +6,7 @@ import { getDataFromToken } from "@/helpers/getUserFromToken";
 
 connect()
 
-// Returns all users except the loggedin user
+// Returns searched user or  all users except the loggedin user 
 export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url)
@@ -37,6 +37,6 @@ export async function GET(request: NextRequest) {
         if (error instanceof SyntaxError && error.message === 'Unexpected end of JSON input') {
             return errorHandler(400, 'Invalid JSON request body')
         }
-        errorHandler()
+        return errorHandler()
     }
 }
