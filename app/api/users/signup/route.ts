@@ -42,6 +42,10 @@ export async function POST(request: NextRequest) {
 
         return response
     } catch (error) {
+        // Handle the unexpected end of JSON input error
+        if (error instanceof SyntaxError && error.message === 'Unexpected end of JSON input') {
+            return errorHandler(400, 'Invalid JSON request body')
+        }
         return errorHandler()
     }
 }

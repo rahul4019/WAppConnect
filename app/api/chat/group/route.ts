@@ -45,6 +45,10 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ fullGroupChat, success: true }, { status: 200 })
     } catch (error) {
+        // Handle the unexpected end of JSON input error
+        if (error instanceof SyntaxError && error.message === 'Unexpected end of JSON input') {
+            return errorHandler(400, 'Invalid JSON request body')
+        }
         return errorHandler()
     }
 

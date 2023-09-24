@@ -9,6 +9,11 @@ connect()
 export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
+
+        if (reqBody === undefined || !reqBody) {
+            return errorHandler(400, "Email and password are required")
+        }
+
         const { email, password } = reqBody;
 
         if (!email || !password) {
@@ -46,6 +51,10 @@ export async function POST(request: NextRequest) {
 
         return response
     } catch (error) {
+        // Handle the unexpected end of JSON input error
+        if (error instanceof SyntaxError && error.message === 'Unexpected end of JSON input') {
+            return errorHandler(400, 'Invalid JSON request body')
+        }
         return errorHandler()
     }
 }
