@@ -26,7 +26,7 @@ export async function PUT(request: NextRequest) {
             .populate("groupAdmin", "-password")
 
         if (!updatedChat) {
-            return errorHandler(400, 'Chat not found')
+            return errorHandler(404, 'Chat not found')
         }
 
         return NextResponse.json({ updatedChat, success: true }, { status: 200 })
