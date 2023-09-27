@@ -7,7 +7,7 @@ interface ContainerProps {
 
 const container: React.FC<ContainerProps> = ({ children }) => {
   return (
-    <div className="mx-auto w-full max-w-screen-2xl">
+    <div className="mx-auto w-full max-w-screen-2xl h-full">
       {children}
       {/* <Image
         src='/app_background.jpg'

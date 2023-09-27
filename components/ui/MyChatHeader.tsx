@@ -5,11 +5,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+ 
+
 import { MessageSquarePlus, MoreVertical } from 'lucide-react';
 
 const MyChatHeader = () => {
   return (
-    <div className="flex w-full items-center justify-between bg-gray-200 p-3">
+    <div className="flex w-full items-center justify-between bg-gray-100 p-3">
       <Avatar>
         <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
         <AvatarFallback>CN</AvatarFallback>
@@ -26,6 +28,7 @@ const MyChatHeader = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+
         {/* menu icon */}
         <TooltipProvider>
           <Tooltip>
