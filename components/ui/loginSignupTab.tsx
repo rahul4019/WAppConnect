@@ -5,16 +5,20 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { Loader2 } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2 } from 'lucide-react';
-import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { setUserInfo } from '@/store/userSlice';
 
 const LoginSignupTab = () => {
   const { toast } = useToast();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [loginData, setLoginData] = useState({
     email: '',
@@ -114,9 +118,13 @@ const LoginSignupTab = () => {
             title: 'Registration successful',
           });
           localStorage.setItem('userInfo', JSON.stringify(data.user));
+          // const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+          // if (userInfo) {
+          //   dispatch(setUserInfo(userInfo));
+          // }
         }
         setLoading(false);
-        router.push('/chat');
+        router.push('/chats');
       } catch (error: any) {
         toast({
           title: error.response.data.message,
@@ -144,9 +152,14 @@ const LoginSignupTab = () => {
             title: 'Login successful',
           });
           localStorage.setItem('userInfo', JSON.stringify(data.user));
+          const userInfoJson = localStorage.getItem('userInfo');
+          if (userInfoJson) {
+            const userInfo = JSON.parse(userInfoJson);
+            dispatch(setUserInfo(userInfo));
+          }
         }
         setLoading(false);
-        router.push('/chat');
+        router.push('/chats');
       } catch (error: any) {
         toast({
           title: error.response.data.message,
