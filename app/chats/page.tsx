@@ -9,16 +9,25 @@ export default async function Chats() {
 
   return (
     <Container>
-      <div className="flex h-screen min-w-full flex-col bg-red-200 p-4">
-        <div className="grid h-full w-full grid-cols-3 bg-white">
+      <div className="overflow- flex h-screen min-w-full flex-col bg-red-200 p-4 ">
+        <div className="grid h-full w-full grid-cols-3 overflow-hidden">
           {/* My chats section */}
-          <div className="col-span-1 hidden   md:block">
+          <div className="col-span-1 box-border hidden max-h-screen flex-col md:flex">
             <MyChatHeader />
             <div className="border-y-1 border bg-white p-2">
               <SearchInput />
             </div>
             {/* chats container */}
-            <div className="h-full ">
+            <div className="box-border flex-grow overflow-y-auto bg-white pb-8">
+              <ChatCard />
+              <ChatCard />
+              <ChatCard />
+              <ChatCard />
+              <ChatCard />
+              <ChatCard />
+              <ChatCard />
+              <ChatCard />
+              <ChatCard />
               <ChatCard />
               <ChatCard />
             </div>

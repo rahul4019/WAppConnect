@@ -7,15 +7,7 @@ interface ContainerProps {
 
 const container: React.FC<ContainerProps> = ({ children }) => {
   return (
-    <div className="mx-auto w-full max-w-screen-2xl h-full">
-      {children}
-      {/* <Image
-        src='/app_background.jpg'
-        alt='app_background'
-        fill
-        className='absolute inset-0'
-      /> */}
-    </div>
+    <div className="mx-auto h-full w-full max-w-screen-2xl">{children}</div>
   );
 };
 
