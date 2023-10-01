@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Tooltip,
   TooltipContent,
@@ -17,12 +19,40 @@ import {
 import SearchInput from './SearchInput';
 import ChatCard from './ChatCard';
 
-import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from './button';
 
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { MessageSquarePlus } from 'lucide-react';
+import { setUsers } from '@/store/usersSlice';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '@/store';
 
 export default function NewChatButton() {
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const users = useAppSelector((state) => state.users);
+
+  const getAllUsers = async () => {
+    try {
+      setLoading(true);
+      const { data } = await axios.get('api/users');
+
+      if (data.success) {
+        dispatch(setUsers(data.users));
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(true);
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllUsers();
+    console.log('Users from store: ', users);
+  }, []);
+
   return (
     <Sheet>
       <SheetTrigger>
@@ -44,17 +74,7 @@ export default function NewChatButton() {
             {/* <Button onClick={handleSearch} /> */}
           </SheetDescription>
         </SheetHeader>
-        {/* {loading ? (
-      <div>Loading...</div>
-    ) : (
-      <div className="flex items-center space-x-4">
-        <Skeleton className="h-12 w-12 rounded-full" />
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
-        </div>
-      </div>
-    )} */}
+        {/* {users && users.length > 0 && users.map((user) => <ChatCard />)} */}
       </SheetContent>
     </Sheet>
   );
