@@ -3,6 +3,7 @@ import Container from '@/components/ui/container';
 import MyChatHeader from '@/components/ui/MyChatHeader';
 import SearchInput from '@/components/ui/SearchInput';
 import ChatCard from '@/components/ui/ChatCard';
+import ChatBoxSection from '@/components/ui/ChatBoxSection';
 
 export default async function Chats() {
   const users = store.getState().users.users;
@@ -35,9 +36,8 @@ export default async function Chats() {
           </div>
           {/* Chat box section */}
           <div className="col-span-2 flex min-h-full flex-col items-center justify-center bg-gray-100">
-            <div className="text-3xl font-light text-gray-400">
-              Click on a user to start a chat
-            </div>
+            
+            <ChatBoxSection />
           </div>
         </div>
       </div>
