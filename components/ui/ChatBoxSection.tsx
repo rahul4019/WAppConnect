@@ -14,9 +14,9 @@ export default function ChatBoxSection() {
           Click on a user to start a chat
         </div>
       ) : (
-        <div className="flex flex-col items-baseline justify-between">
+        <div className="flex flex-col items-baseline justify-between  h-full">
           <ChatBoxSectionHeader />
-          chat is selected
+          <div>chat is selected</div>
           <ChatInput />
         </div>
       )}
