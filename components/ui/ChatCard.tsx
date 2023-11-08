@@ -1,7 +1,7 @@
 'use client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-const ChatCard = (props) => {
+const ChatCard = (props:any) => {
   // const { _id, name, email, pic } = props?.user;
 
   // console.log('_id: ', props?.user?._id);
@@ -16,7 +16,7 @@ const ChatCard = (props) => {
       <div className="border-y-1 flex cursor-pointer gap-4 border px-2 py-4 hover:bg-gray-100">
         <Avatar>
           {/* profile pic */}
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage src={props.user.pic} alt="@shadcn" />
           <AvatarFallback>{props?.user?.name}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col">

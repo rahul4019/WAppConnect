@@ -1,13 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { Users } from "@/types";
+import { Users, UserInfo } from "@/types";
 import axiosInstance from "@/helpers/axios";
 
 
 
 // Define initial state
 const initialState = {
-    users: [],
+    users: [] as UserInfo[],
     loading: 'idle',
     error: null,
 };
@@ -32,7 +32,12 @@ export const usersSlice = createSlice({
     //         return action.payload;
     //     }
     // }
-    reducers: {},
+    reducers: {
+        filterUsers: (state, action) => {
+            const searchTerm = action.payload.toLowerCase();
+            state.users = state.users.filter((user) => user.name.toLowerCase().includes(searchTerm));
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchUsers.pending, (state) => {
@@ -42,12 +47,12 @@ export const usersSlice = createSlice({
                 state.loading = 'succeeded';
                 state.users = action.payload;
             })
-            .addCase(fetchUsers.rejected, (state, action) => {
+            .addCase(fetchUsers.rejected, (state:any, action) => {
                 state.loading = 'failed';
                 state.error = action.payload;
             });
     }
 });
 
-
+export const { filterUsers } = usersSlice.actions;
 export default usersSlice.reducer;
