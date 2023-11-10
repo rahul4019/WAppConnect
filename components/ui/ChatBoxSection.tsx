@@ -10,15 +10,15 @@ export default function ChatBoxSection() {
   const [chatSelected, setChatSelected] = useState(true);
 
   return (
-    <div className="relative flex h-full w-full flex-col">
+    <div className="relative flex h-full w-full flex-col ">
       <Image
         src={background}
         alt="background"
         fill
         priority
-        className="-z-1"
+        className="-z-1 backdrop-blur-md backdrop-brightness-150"
         placeholder="blur"
-        style={{ objectFit: 'cover' }}
+        style={{ objectFit: 'cover', opacity: '0.3'}}
       />
       {!chatSelected ? (
         <div className="text-3xl font-light text-gray-400">

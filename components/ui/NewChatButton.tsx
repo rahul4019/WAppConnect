@@ -24,7 +24,6 @@ import { Button } from './button';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { MessageSquarePlus } from 'lucide-react';
-import { setUsers } from '@/store/usersSlice';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '@/store';
 
@@ -39,7 +38,6 @@ export default function NewChatButton() {
       const { data } = await axios.get('api/users');
 
       if (data.success) {
-        dispatch(setUsers(data.users));
       }
       setLoading(false);
     } catch (error) {
