@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <ReduxProvider>
       <html lang="en">
-        <body className={inter.className}>
+        <body className={` bg-[#efeae2] ${inter.className}`}>
           {children}
           <Toaster />
         </body>
