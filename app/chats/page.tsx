@@ -5,24 +5,23 @@ import MyChatHeader from '@/components/ui/MyChatHeader';
 import SearchInput from '@/components/ui/SearchInput';
 import ChatCard from '@/components/ui/ChatCard';
 import ChatBoxSection from '@/components/ui/ChatBoxSection';
-import axiosInstance from '@/helpers/axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchUsers } from '@/store/usersSlice';
 
 export default function Chats() {
-  // const users = store.getState().users.users;
-
   const users = useSelector((state: RootState) => state.users.users);
   const status = useSelector((state: RootState) => state.users.loading);
-  const error = useSelector((state: RootState) => state.users.error);
-  console.log('All users: ', users);
   const dispatch: AppDispatch = useDispatch();
+
+  const [chatSelected, setChatSelected] = useState(false);
+  const [selectedUser, setSelectedUser] = useState({});
 
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchUsers());
     }
+    console.log('selected user: ', selectedUser);
   });
 
   return (
@@ -38,12 +37,22 @@ export default function Chats() {
             {/* chats container */}
             <div className="box-border flex-grow overflow-y-auto bg-white pb-8">
               {users.length > 0 &&
-                users.map((user) => <ChatCard key={user._id} user={user} />)}
+                users.map((user) => (
+                  <ChatCard
+                    key={user._id}
+                    user={user}
+                    setChatSelected={setChatSelected}
+                    setSelectedUser={setSelectedUser}
+                  />
+                ))}
             </div>
           </div>
           {/* Chat box section */}
           <div className="col-span-2 flex min-h-full flex-col items-center justify-center bg-gray-100">
-            <ChatBoxSection />
+            <ChatBoxSection
+              chatSelected={chatSelected}
+              selectedUser={selectedUser}
+            />
           </div>
         </div>
       </div>

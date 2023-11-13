@@ -12,6 +12,7 @@ const SearchInput = () => {
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
+    // dispatch action based on keyword
     keyword === '' ? dispatch(fetchUsers()) : dispatch(filterUsers(keyword));
   }, [keyword]);
 

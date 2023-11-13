@@ -1,18 +1,15 @@
 'use client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
-const ChatCard = (props:any) => {
-  // const { _id, name, email, pic } = props?.user;
-
-  // console.log('_id: ', props?.user?._id);
-  // console.log('_id: ', props.user._id);
-  // console.log('name: ', name);
-  // console.log('email: ', email);
-  // console.log('pic: ', pic);
-
-  console.log('PROPS in ChatCard: ', props);
+const ChatCard = (props: any) => {
+  const { setChatSelected, setSelectedUser, user } = props;
   return (
-    <div>
+    <div
+      onClick={() => {
+        setChatSelected(true);
+        setSelectedUser(user);
+      }}
+    >
       <div className="border-y-1 flex cursor-pointer gap-4 border px-2 py-4 hover:bg-gray-100">
         <Avatar>
           {/* profile pic */}
