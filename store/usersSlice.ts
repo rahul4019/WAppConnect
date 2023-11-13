@@ -15,7 +15,7 @@ const initialState = {
 // First, create the thunk
 export const fetchUsers = createAsyncThunk('users/fetchusers', async () => {
     try {
-        const { data } = await axiosInstance.get('http://localhost:3000/api/users');
+        const { data } = await axiosInstance.get('/api/users');
         return data.users;
     } catch (error) {
         throw error;
