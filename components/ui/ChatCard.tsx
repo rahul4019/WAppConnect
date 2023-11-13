@@ -1,7 +1,14 @@
 'use client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { UserInfo } from '@/types';
 
-const ChatCard = (props: any) => {
+interface ChatCardProps {
+  setChatSelected: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedUser: React.Dispatch<React.SetStateAction<UserInfo | null>>;
+  user: UserInfo;
+}
+
+const ChatCard = (props: ChatCardProps) => {
   const { setChatSelected, setSelectedUser, user } = props;
   return (
     <div

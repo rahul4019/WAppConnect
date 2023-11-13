@@ -5,12 +5,21 @@ import ChatBoxSectionHeader from './ChatBoxSectionHeader';
 import ChatInput from './ChatInput';
 import background from '../../public/background.jpg';
 import Image from 'next/image';
+import { UserInfo } from '@/types';
 
-export default function ChatBoxSection(props: any) {
-  // const [chatSelected, setChatSelected] = useState(true);
-  // const [chatSelected, setChatSelected] = useState(false);
+interface ChatBoxSectionProps {
+  chatSelected: boolean;
+  selectedUser: UserInfo | null;
+}
+
+export default function ChatBoxSection(props: ChatBoxSectionProps) {
   const { chatSelected, selectedUser } = props;
-  const {email, name, pic, _id} = selectedUser
+  const { email, name, pic, _id } = selectedUser || {
+    email: '',
+    name: '',
+    pic: '',
+    _id: '',
+  };
 
   console.log('chat selected: ', chatSelected);
   useEffect(() => {
@@ -33,7 +42,7 @@ export default function ChatBoxSection(props: any) {
         </div>
       ) : (
         <div className="flex h-full flex-col items-baseline justify-between">
-          <ChatBoxSectionHeader selectedUser={selectedUser}/>
+          <ChatBoxSectionHeader selectedUser={selectedUser} />
           {/* <div className="z-10 px-8 text-black">chat is selected</div> */}
           <ChatInput />
         </div>

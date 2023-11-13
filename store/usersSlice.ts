@@ -9,7 +9,7 @@ import axiosInstance from "@/helpers/axios";
 const initialState = {
     users: [] as UserInfo[],
     loading: 'idle',
-    error: null,
+    error: null as Error | null,
 };
 
 // First, create the thunk
@@ -48,9 +48,9 @@ export const usersSlice = createSlice({
                 state.loading = 'succeeded';
                 state.users = action.payload;
             })
-            .addCase(fetchUsers.rejected, (state: any, action) => {
+            .addCase(fetchUsers.rejected, (state, action) => {
                 state.loading = 'failed';
-                state.error = action.payload;
+                state.error = action.payload as Error;
             });
     }
 });

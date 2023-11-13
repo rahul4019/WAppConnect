@@ -8,6 +8,7 @@ import ChatBoxSection from '@/components/ui/ChatBoxSection';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { fetchUsers } from '@/store/usersSlice';
+import { UserInfo } from '@/types';
 
 export default function Chats() {
   const users = useSelector((state: RootState) => state.users.users);
@@ -15,7 +16,7 @@ export default function Chats() {
   const dispatch: AppDispatch = useDispatch();
 
   const [chatSelected, setChatSelected] = useState(false);
-  const [selectedUser, setSelectedUser] = useState({});
+  const [selectedUser, setSelectedUser] = useState<UserInfo | null>(null);
 
   useEffect(() => {
     if (status === 'idle') {
