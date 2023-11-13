@@ -35,6 +35,7 @@ export const usersSlice = createSlice({
     reducers: {
         filterUsers: (state, action) => {
             const searchTerm = action.payload.toLowerCase();
+            console.log('SEARCH TERM: ', searchTerm);
             state.users = state.users.filter((user) => user.name.toLowerCase().includes(searchTerm));
         }
     },
@@ -47,7 +48,7 @@ export const usersSlice = createSlice({
                 state.loading = 'succeeded';
                 state.users = action.payload;
             })
-            .addCase(fetchUsers.rejected, (state:any, action) => {
+            .addCase(fetchUsers.rejected, (state: any, action) => {
                 state.loading = 'failed';
                 state.error = action.payload;
             });

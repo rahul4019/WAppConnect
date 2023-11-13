@@ -16,18 +16,17 @@ export default function ChatBoxSection() {
         alt="background"
         fill
         priority
-        className="-z-1 backdrop-blur-md backdrop-brightness-150"
-        placeholder="blur"
-        style={{ objectFit: 'cover', opacity: '0.3'}}
+        className="-z-1"
+        style={{ objectFit: 'cover', opacity: '0.2' }}
       />
       {!chatSelected ? (
-        <div className="text-3xl font-light text-gray-400">
-          Click on a user to start a chat
+        <div className="z-10 flex h-full items-center justify-center bg-[#f0f2f5] text-3xl font-light text-gray-400">
+          <p className="flex">Click on a user to start a chat</p>
         </div>
       ) : (
         <div className="flex h-full flex-col items-baseline  justify-between">
           <ChatBoxSectionHeader />
-          <div className="z-10 text-white">chat is selected</div>
+          <div className="z-10 text-black">chat is selected</div>
           <ChatInput />
         </div>
       )}
