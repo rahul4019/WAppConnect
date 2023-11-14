@@ -8,6 +8,7 @@ import Chat from "@/models/chat";
 
 connect();
 
+// send a message
 export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
