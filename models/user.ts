@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema(
   {
@@ -30,13 +30,13 @@ const userSchema = new mongoose.Schema(
 
 // encrypt password before saving it in the DB
 userSchema.pre("save", async function () {
-  this.password = await bcrypt.hash(this.password, 10)
-})
+  this.password = await bcrypt.hash(this.password, 10);
+});
 
 // validate the password with passed on user password
 userSchema.methods.isValidatePassword = async function (userSentPassword: string) {
-  return await bcrypt.compare(userSentPassword, this.password)
-}
+  return await bcrypt.compare(userSentPassword, this.password);
+};
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 

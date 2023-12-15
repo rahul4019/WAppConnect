@@ -6,6 +6,8 @@ import ChatInput from './ChatInput';
 import background from '../../public/background.jpg';
 import Image from 'next/image';
 import { UserInfo } from '@/types';
+import SentMsg from './SentMsg';
+import ReceivedMsg from './ReceivedMsg';
 
 interface ChatBoxSectionProps {
   chatSelected: boolean;
@@ -44,6 +46,10 @@ export default function ChatBoxSection(props: ChatBoxSectionProps) {
         <div className="flex h-full flex-col items-baseline justify-between">
           <ChatBoxSectionHeader selectedUser={selectedUser} />
           {/* <div className="z-10 px-8 text-black">chat is selected</div> */}
+          <div className="z-20 h-full w-full p-8">
+            <SentMsg />
+            <ReceivedMsg />
+          </div>
           <ChatInput />
         </div>
       )}
