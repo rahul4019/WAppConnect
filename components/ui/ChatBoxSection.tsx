@@ -24,9 +24,7 @@ export default function ChatBoxSection(props: ChatBoxSectionProps) {
   };
 
   console.log('chat selected: ', chatSelected);
-  useEffect(() => {
-    console.log('chat selection triggered ');
-  }, [chatSelected]);
+  useEffect(() => {}, [chatSelected]);
 
   return (
     <div className="relative flex h-full w-full flex-col ">

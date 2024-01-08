@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { fetchUsers } from '@/store/usersSlice';
 import { UserInfo } from '@/types';
+import axiosInstance from '@/helpers/axios';
 
 export default function Chats() {
   const users = useSelector((state: RootState) => state.users.users);
@@ -21,6 +22,14 @@ export default function Chats() {
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchUsers());
+      axiosInstance
+        .get('/api/chat')
+        .then((res) => {
+          console.log('RES: ', res);
+        })
+        .catch((err) => {
+          console.log('Err: ', err);
+        });
     }
     console.log('selected user: ', selectedUser);
   });
@@ -38,7 +47,7 @@ export default function Chats() {
             {/* chats container */}
             <div className="box-border flex-grow overflow-y-auto bg-white pb-8">
               {users.length > 0 &&
-                users.map((user) => (
+                users.map((user: any) => (
                   <ChatCard
                     key={user._id}
                     user={user}

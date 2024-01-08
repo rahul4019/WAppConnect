@@ -1,20 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import Chat from "@/models/chat";
 import User from "@/models/user";
+import Message from "@/models/message";
 import { getDataFromToken } from "@/helpers/getUserFromToken";
 import { errorHandler } from "@/middlewares/error";
+
 
 // Access or create one-to-one chat
 export async function POST(request: NextRequest) {
     try {
-        const LoggedInUser = getDataFromToken(request)
-
+        const LoggedInUser = getDataFromToken(request);
         // if user not authorized
         if (!LoggedInUser) {
-            return NextResponse.json({ success: false, message: "Not authorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Not authorized" }, { status: 401 });
         }
 
-        const reqBody = await request.json()
+        const reqBody = await request.json();
         const { userId } = reqBody;
 
         // if chat exist find the chat populate desired fields 
@@ -31,7 +32,7 @@ export async function POST(request: NextRequest) {
         isChatExist = await User.populate(isChatExist, {
             path: 'latestMessage.sender',
             select: "name pic email",
-        })
+        });
 
         // send the latest message
         if (isChatExist.length > 0) {
@@ -48,11 +49,11 @@ export async function POST(request: NextRequest) {
                 chatName: "sender",
                 isGroupChat: false,
                 users: [LoggedInUser.id, userId]
-            }
+            };
 
             const createdChat = await Chat.create(chatData);
 
-            const fullChat = await Chat.findOne({ _id: createdChat._id }).populate("users", "-password")
+            const fullChat = await Chat.findOne({ _id: createdChat._id }).populate("users", "-password");
 
             return NextResponse.json(
                 { fullChat, success: true },
@@ -65,40 +66,41 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         // Handle the unexpected end of JSON input error
         if (error instanceof SyntaxError && error.message === 'Unexpected end of JSON input') {
-            return errorHandler(400, 'Invalid JSON request body')
+            return errorHandler(400, 'Invalid JSON request body');
         }
-        return errorHandler()
+        return errorHandler();
     }
 }
 
 // Fetch all the chats of a user
 export async function GET(request: NextRequest) {
     try {
-        const LoggedInUser = getDataFromToken(request)
+        const LoggedInUser = getDataFromToken(request);
 
         // if user not authorized
         if (!LoggedInUser) {
-            return NextResponse.json({ success: false, message: "Not authorized" }, { status: 401 })
+            return NextResponse.json({ success: false, message: "Not authorized" }, { status: 401 });
         }
 
         // get allchats of user and populate desired fields
         let allChats = await Chat.find({ users: { $elemMatch: { $eq: LoggedInUser.id } } })
             .populate("users", "-password") // users of the chat
             .populate("groupAdmin", "-password") // group admin of the chat
-            .populate("latestMessage") // lateste message
-            .sort({ updatedAt: -1 }) // sort it by the latest 
+            .populate("latestMessage") // latest message
+            .sort({ updatedAt: -1 }); // sort it by the latest 
         // populate fields from User 
         allChats = await User.populate(allChats, {
             path: 'latestMessage.sender',
             select: "name pic email"
-        })
+        });
 
-        return NextResponse.json({ allChats, success: true }, { status: 200 })
+        return NextResponse.json({ allChats, success: true }, { status: 200 });
     } catch (error) {
         // Handle the unexpected end of JSON input error
         if (error instanceof SyntaxError && error.message === 'Unexpected end of JSON input') {
-            return errorHandler(400, 'Invalid JSON request body')
+            return errorHandler(400, 'Invalid JSON request body');
         }
-        return errorHandler()
+        console.log('Error: ', error);
+        return errorHandler();
     }
 }
