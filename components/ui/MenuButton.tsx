@@ -11,7 +11,19 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import axiosInstance from '@/helpers/axios';
 import { MoreVertical } from 'lucide-react';
+
+
+const handleLogout = async () => {
+  axiosInstance
+    .get('/api/users/logout')
+    .then((res) => {
+      console.log(res);
+      
+    })
+    .catch((err) => console.log(err));
+};
 
 export default function MenuButton() {
   return (
@@ -28,9 +40,16 @@ export default function MenuButton() {
         </TooltipProvider>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>New group</DropdownMenuItem>
-        <DropdownMenuItem>Settings</DropdownMenuItem>
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          New group
+        </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => handleLogout()}
+        >
+          Log out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
