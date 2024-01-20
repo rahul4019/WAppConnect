@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
         }
 
         // check if user exist
-        const user = await User.findOne({ email }).select('-createdAt -updatedAt -__v'); 
+        const user = await User.findOne({ email }).select('-createdAt -updatedAt -__v');
         if (!user) {
             return errorHandler(400, 'User does not exist');
         }
