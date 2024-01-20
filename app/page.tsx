@@ -6,7 +6,7 @@ const work_sans = Work_Sans({ subsets: ['latin'], weight: '400' });
 
 export default async function Home() {
   return (
-    <main className="flex min-h-screen min-w-full flex-col items-center  justify-between bg-[#efeae2] p-4 ">
+    <main className="flex min-h-screen min-w-full flex-col items-center  justify-between bg-[#efeae2] p-4 " >
       <Container>
         <div className="flex w-full flex-col items-center justify-center gap-3">
           {/* Title */}

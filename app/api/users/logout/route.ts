@@ -3,7 +3,7 @@ import { connect } from "@/config/db";
 import { errorHandler } from "@/middlewares/error";
 
 connect();
-export async function GET() {
+export async function POST() {
     try {
         const response = NextResponse.json({ message: 'Logout successful', success: true });
         // remove the token from the cookie

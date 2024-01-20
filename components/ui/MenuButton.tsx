@@ -1,3 +1,7 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,21 +15,26 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import axiosInstance from '@/helpers/axios';
+
+import { useToast } from '@/components/ui/use-toast';
 import { MoreVertical } from 'lucide-react';
 
-
-const handleLogout = async () => {
-  axiosInstance
-    .get('/api/users/logout')
-    .then((res) => {
-      console.log(res);
-      
-    })
-    .catch((err) => console.log(err));
-};
+import axiosInstance from '@/helpers/axios';
 
 export default function MenuButton() {
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleLogout = async () => {
+    axiosInstance
+      .post('/api/users/logout')
+      .then((res) => {
+        toast({ title: 'Logout successful!' });
+        router.push('/');
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
